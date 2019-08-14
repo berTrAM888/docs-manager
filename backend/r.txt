@@ -6,7 +6,6 @@ certifi==2018.1.18
 chardet==3.0.4
 click==6.7
 colorama==0.3.7
-command-not-found==0.3
 configobj==5.0.6
 constantly==15.1.0
 cryptography==2.1.4
@@ -23,7 +22,6 @@ jsonpointer==1.10
 jsonschema==2.6.0
 keyring==10.6.0
 keyrings.alt==3.0
-language-selector==0.1
 livereload==2.6.1
 Markdown==3.1
 MarkupSafe==1.0
@@ -41,7 +39,6 @@ PyJWT==1.5.3
 pymdown-extensions==6.0
 pyOpenSSL==17.5.0
 pyserial==3.4
-python-apt
 python-debian==0.1.32
 pyxdg==0.25
 PyYAML==3.12
@@ -50,11 +47,8 @@ requests-unixsocket==0.1.5
 SecretStorage==2.3.1
 service-identity==16.0.0
 six==1.11.0
-ssh-import-id
 tornado==6.0.2
 Twisted==17.9.0
-ufw==0.35
-unattended-upgrades==0.1
 urllib3==1.22
 Werkzeug==0.15.4
 zope.interface==4.3.2
