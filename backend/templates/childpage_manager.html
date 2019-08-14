@@ -1,0 +1,122 @@
+{% extends "base.html"%}
+{% block title %}
+子页面管理
+{% endblock %}
+{% block head_title %}
+子页面管理
+{% endblock %}
+{% block active_page %}
+子页面管理
+{% endblock %}
+{% block body %}
+<section class="content">
+      <!-- Main row -->
+      <div class="row">
+        <div class="col-md-12">
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">子页面</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div id="test-editor">
+              <textarea style="display:none;">
+  ### 关于 Editor.md
+  **Editor.md** 是一款开源的、可嵌入的 Markdown 在线编辑器（组件），基于 CodeMirror、jQuery 和 Marked 构建。
+              </textarea>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <button id="new" class="btn btn-sm btn-info btn-flat pull-right">新建页面</button>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+{% endblock %}
+{% block script %}
+<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://editor.md.ipandao.com/editormd.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var editor = editormd("test-editor", {
+            // width  : "100%",
+            // height : "100%",
+            path   : "editormd/lib/"
+        });
+    });
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $("#new").click(function(){
+    $("#create_form").css('display','block');
+  });
+
+  $("#create").click(function(){
+    var data = {
+      "page":$("#new_username").val()
+    };
+
+    $.ajax({
+      type:'POST',
+      url:'/admin/API/page/add',
+      contentType:'application/json',
+      data:JSON.stringify(data),
+      async:false,
+      success:function(result){
+          if(result.code == 200){
+            alert(result.msg);
+            window.location.reload();
+          }else if(result.code == 500){
+            alert(result.msg);
+          };
+        },error:function(){
+          alert("网络错误");
+        }
+    });
+    return false;
+  });
+
+    $("[id = delete]").click(function(){
+      var parent = $(this).parent().parent().children("#parent").children("a").html();
+      var child = $(this).parent().parent().children("#child").children("a").html();
+      var data = {"parent":parent,"child":child};
+      $.ajax({
+          type:'POST',
+          url:"/admin/API/childpage/delete",
+          async: false,
+          contentType:'application/json',
+          data:JSON.stringify(data),
+          success:function(result){
+            if(result.code == 200){
+              alert(result.msg);
+              window.location.reload();
+            }else if(result.code == 500){
+              alert(result.msg);
+            };
+          },error:function(){
+            alert("网络错误");
+          }
+      });
+      return false;
+
+  });
+
+
+});
+</script>
+{% endblock %}

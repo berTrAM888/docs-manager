@@ -1,0 +1,102 @@
+{% extends "base.html"%}
+{% block title %}
+网站信息修改
+{% endblock %}
+{% block head_title %}
+网站信息修改
+{% endblock %}
+{% block active_page %}
+网站信息修改
+{% endblock %}
+{% block body %}
+<section class="content">
+      <!-- Main row -->
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">网站信息</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <form role="form">
+                <!-- text input -->
+                <div class="form-group">
+                  <label>网站名称</label>
+                  <input id="site_name" type="text" class="form-control" value="{{ config['site_name'] }}">
+                </div>
+
+                <div class="form-group">
+                  <label>网站描述</label>
+                  <input id="site_description" type="text" class="form-control" value="{{ config['site_description'] }}">
+                </div>
+
+                <!-- textarea -->
+                <div class="form-group">
+                  <label>网站归属</label>
+                  <input id="site_author" type="text" class="form-control" value="{{ config['site_author'] }}">
+                </div>
+
+                <div class="form-group">
+                  <label>copyright</label>
+                  <input id="copyright" type="text" class="form-control" value="{{ config['copyright'] }}">
+                </div>
+
+                <div class="form-group has-error">
+                  <label class="control-label" for="inputError">网站URL</label>
+                  <input id="site_url" type="text" class="form-control" value="{{ config['site_url'] }}">
+                  <span class="help-block">请勿随意修改URL,上线请配置正确URL</span>
+                </div>
+              </form>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <button id="modify" class="btn btn-sm btn-info btn-flat pull-right">修改</button>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+        <div class="col-md-2"></div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+
+   $("#modify").click(function(){
+    var data = {
+      "site_name":$("#site_name").val(),
+      "site_description":$("#site_description").val(),
+      "site_author":$("#site_author").val(),
+      "site_url":$("#site_url").val(),
+      "copyright":$("#copyright").val()
+    };
+    $.ajax({
+        type:'POST',
+        url:"/admin/API/manager",
+        async: false,
+        contentType:'application/json',
+        data:JSON.stringify(data),
+        success:function(result){
+          //console.log(result);
+          if(result.code == 200){
+            alert(result.msg);
+            window.location.reload();
+          }else if(result.code == 500){
+            alert(result.msg);
+          };
+        },error:function(){
+          alert("网络错误");
+        }
+    });
+    return false;
+  });
+
+});
+</script>
+{% endblock %}

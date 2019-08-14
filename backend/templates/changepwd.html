@@ -1,0 +1,90 @@
+{% extends "base.html"%}
+{% block title %}
+管理员密码修改
+{% endblock %}
+{% block head_title %}
+管理员密码修改
+{% endblock %}
+{% block active_page %}
+管理员密码修改
+{% endblock %}
+{% block body %}
+<section class="content">
+      <!-- Main row -->
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">管理员密码修改</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <form role="form">
+                <!-- text input -->
+                <div class="form-group">
+                  <label>原密码</label>
+                  <input id="prev_pwd" type="password" class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                  <label>新密码</label>
+                  <input id="new_pwd" type="password" class="form-control" value="">
+                </div>
+
+                <!-- textarea -->
+                <div class="form-group">
+                  <label>重复新密码</label>
+                  <input id="repeat_new_pwd" type="password" class="form-control" value="">
+                </div>
+
+              </form>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <button id="modify" class="btn btn-sm btn-info btn-flat pull-right">修改</button>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+        <div class="col-md-2"></div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+
+   $("#modify").click(function(){
+    var data = {
+      "prev_pwd":$("#prev_pwd").val(),
+      "new_pwd":$("#new_pwd").val(),
+      "repeat_new_pwd":$("#repeat_new_pwd").val()
+    };
+    $.ajax({
+        type:'POST',
+        url:"/admin/API/changepwd",
+        async: false,
+        contentType:'application/json',
+        data:JSON.stringify(data),
+        success:function(result){
+          //console.log(result);
+          if(result.code == 200){
+            alert(result.msg);
+            window.location.reload();
+          }else if(result.code == 500){
+            alert(result.msg);
+          };
+        },error:function(){
+          alert("网络错误");
+        }
+    });
+    return false;
+  });
+
+});
+</script>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends "base.html"%}
+{% block title %}
+新建文章
+{% endblock %}
+{% block head_title %}
+新建文章
+{% endblock %}
+{% block active_page %}
+新建文章
+{% endblock %}
+{% block body %}
+<section class="content">
+      <!-- Main row -->
+      <div class="row">
+        <div class="col-md-12">
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">文章</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="height: 500px;">
+              <div id="alert" class="row">
+              </div>
+              <div id="editor">
+                  <!-- Tips: Editor.md can auto append a `<textarea>` tag -->
+                  <textarea style="display:none;" name="editor-markdown-doc"></textarea>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              自定义文件名: <input type="text" class="form" id="filename" placeholder="filename">
+              <button id="upload" class="btn btn-sm btn-info btn-flat pull-right">创建</button>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+{% endblock %}
+{% block script %}
+<script src="/static/editor.md/editormd.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+  var editor = editormd("editor", {
+    width: "100%",
+    height: "100%",
+    // markdown: "xxxx",     // dynamic set Markdown text
+    path : "/static/editor.md/lib/",  // Autoload modules mode, codemirror, marked... dependents libs path
+    watch : true,
+    emoji : true,
+    syncScrolling : true,
+    placeholder : "如果您不了解MarkDown语法,请详细阅读文档后再写文章!\
+    享受MarkDown吧!",
+    toolbarIcons : function() {
+            // Or return editormd.toolbarModes[name]; // full, simple, mini
+            // Using "||" set icons align right.
+            return ["undo", "redo", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "color" ,"|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|", "goto-line", "watch", "preview", "fullscreen", "clear", "search", "|", "help", "info"]
+        },
+        // 用于增加自定义工具栏的功能，可以直接插入HTML标签，不使用默认的元素创建图标
+        toolbarCustomIcons : {
+            color   : '<input id="cgfontcolor" type="color" value="#ffffff"/>'
+        },
+        lang : {
+            toolbar : {
+                color : "颜色修改",  // 自定义按钮的提示文本，即title属性
+            }
+        },
+        onload : function(){
+            $("[type=\"color\"]").bind("change", function(){
+                //alert($(this).val());
+                editor.cm.replaceSelection("<font color='"+$(this).val()+"'>"+editor.getSelection()+"</font>");
+                //console.log($(this).val(), testEditor);
+                //console.log(editor.getSelection());
+            });
+        }
+  });
+
+  $("#upload").click(function(){
+    if($("#filename").val() == ""){
+      var data = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-ban"></i>请填写文件名</h4>请重新尝试';
+      $("#alert").html(data).addClass('alert alert-danger alert-dismissible').show().delay(1500).fadeOut();
+      return false;
+    }
+    var data = {
+      "markdown_content":editor.getMarkdown(),
+      "filename":$("#filename").val()
+    };
+
+    $.ajax({
+      type:'POST',
+      url:'/admin/API/article/post',
+      contentType:'application/json',
+      data:JSON.stringify(data),
+      async:false,
+      success:function(result){
+          if(result.code == 200){
+            var data = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-check"></i>'+result.msg+'</h4>上传文件名为'+result.path;
+            $("#alert").html(data).addClass('alert alert-success alert-dismissible').show();
+          }else if(result.code == 500){
+            var data = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-ban"></i>'+result.msg+'</h4>请重新尝试';
+            $("#alert").html(data).addClass('alert alert-danger alert-dismissible').show().delay(1500).fadeOut();
+          };
+        },error:function(){
+          alert("网络错误");
+        }
+    });
+    return false;
+  });
+
+});
+</script>
+{% endblock %}

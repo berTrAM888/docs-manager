@@ -1,0 +1,169 @@
+{% extends "base.html"%}
+{% block title %}
+管理员管理
+{% endblock %}
+{% block head_title %}
+管理员管理
+{% endblock %}
+{% block active_page %}
+管理员管理
+{% endblock %}
+{% block body %}
+<section class="content">
+      <!-- Main row -->
+      <div class="row">
+        <div class="col-md-12">
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">管理员</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                  <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>用户名</th>
+                    <th>删除</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    {% if admins %}
+                      {% for admin in admins %}
+                        <tr>
+                          <td>{{ loop.index }}</td>
+                          <td id="username"><a href="#">{{ admin["username"] }}</a></td>
+                          <td>
+                            <button id="delete" type="button" class="btn btn-danger btn-xs"><i class="fa fa-fw fa-minus-square"></i></button>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    {% else %}
+                    <tr>
+                          <td>#</td>
+                          <td><a href="#">#</a></td>
+                          <td>
+                            <button id="delete" type="button" class="btn btn-danger btn-xs"><i class="fa fa-fw fa-minus-square"></i></button>
+                          </td>
+                        </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <button id="new" class="btn btn-sm btn-info btn-flat pull-right">新建管理员</button>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        <div id="create_form" class="col-md-12" style="display:none;">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">创建管理员</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form class="form-horizontal">
+              <div class="box-body">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">管理员</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="new_username" placeholder="Username">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">密码</label>
+
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" id="password" placeholder="Password">
+                  </div>
+                </div>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button id="create" class="btn btn-info pull-right">创建</button>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+    </section>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $("#new").click(function(){
+    $("#create_form").css('display','block');
+  });
+
+  $("#create").click(function(){
+    var data = {
+      "username":$("#new_username").val(),
+      "password":$("#password").val()
+    };
+
+    $.ajax({
+      type:'POST',
+      url:'/admin/API/user/add',
+      contentType:'application/json',
+      data:JSON.stringify(data),
+      async:false,
+      success:function(result){
+          if(result.code == 200){
+            alert(result.msg);
+            window.location.reload();
+          }else if(result.code == 500){
+            alert(result.msg);
+          };
+        },error:function(){
+          alert("网络错误");
+        }
+    });
+    
+    return false;
+  });
+
+    $("[id = delete]").click(function(){
+      var username=$(this).parent().parent().children("#username").children("a").html();
+      var data = {"username":username};
+      $.ajax({
+          type:'POST',
+          url:"/admin/API/user/delete",
+          async: false,
+          contentType:'application/json',
+          data:JSON.stringify(data),
+          success:function(result){
+            if(result.code == 200){
+              alert(result.msg);
+              window.location.reload();
+            }else if(result.code == 500){
+              alert(result.msg);
+            };
+          },error:function(){
+            alert("网络错误");
+          }
+      });
+      return false;
+
+  });
+
+
+});
+</script>
+{% endblock %}

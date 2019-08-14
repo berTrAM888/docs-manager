@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>登陆 | 联考补给站</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="generator" content="bertram" />
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='admin/bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='admin/bower_components/font-awesome/css/font-awesome.min.css') }}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='admin/bower_components/Ionicons/css/ionicons.min.csc') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='admin/dist/css/AdminLTE.min.css') }}">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='admin/plugins/iCheck/square/blue.css') }}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <style>
+    .btn-primary:hover, .btn-primary:active, .btn-primary {
+      background-color: #1E9FFF;
+    }
+  </style>
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="{{ url_for('index') }}"><b>AD</b>Admin</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">管理员登陆</p>
+    <div id="alert" class="row">
+
+      </div>
+    <form id="login_form" action="" method="post">
+      <div class="form-group has-feedback">
+        <input id="username" type="text" class="form-control" placeholder="请输入邮箱或用户名">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input id="password" type="password" class="form-control" placeholder="请输入密码">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-4">
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button id="login-btn" type="submit" class="btn btn-primary btn-block btn-flat">登陆</button>
+        </div>
+        <!-- /.col -->
+      </div>
+      <div style="padding-top: 10px;"></div>
+    </form>
+    <!-- /.social-auth-links -->
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery 3 -->
+<script src="{{ url_for('static',filename='admin/bower_components/jquery/dist/jquery.min.js') }}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{{ url_for('static',filename='admin/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<script>
+$(document).ready(function(){
+  $("#login-btn").click(function(){
+
+    var data = {
+      "username": $("#username").val(),
+      "password": $("#password").val()
+    };
+
+    $.ajax({
+        type:'POST',
+        url:"/admin/API/login",
+        contentType:'application/json',
+        data:JSON.stringify(data),
+        async: false,
+        success:function(result){
+          console.log(result);
+          if(result.code == 200){
+            var data = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-check"></i>'+result.msg+'</h4>将在2秒后跳转主页';
+            $("#alert").html(data).addClass('alert alert-success alert-dismissible').show().delay(1500).fadeOut();
+            setTimeout("window.location.href = 'index.html'",2000);
+            //window.location.href = "index.html";
+          }else if(result.code == 500){
+            //$("#alert").text("");
+            var data = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-ban"></i>'+result.msg+'</h4>请重新输入账户密码尝试';
+            $("#alert").html(data).addClass('alert alert-danger alert-dismissible').show().delay(1500).fadeOut();
+            $("#login_form")[0].reset();
+          };
+        },error:function(){
+
+        }
+      });
+
+      return false;
+
+  });
+});
+
+</script>
+</body>
+</html>

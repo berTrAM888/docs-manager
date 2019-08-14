@@ -1,0 +1,35 @@
+copyright: Copyright &copy; 2018- 2019 cccccccc
+markdown_extensions:
+- admonition
+- codehilite: {guess_lang: false}
+- def_list
+- footnotes
+- meta
+- toc: {permalink: true}
+- pymdownx.arithmatex
+- pymdownx.caret
+- pymdownx.critic
+- pymdownx.details
+- pymdownx.emoji: {emoji_generator: !!python/name:pymdownx.emoji.to_svg ''}
+- pymdownx.inlinehilite
+- pymdownx.keys
+- pymdownx.magiclink
+- pymdownx.mark
+- pymdownx.smartsymbols
+- pymdownx.superfences
+- pymdownx.tasklist: {custom_checkbox: true}
+- pymdownx.tilde
+nav:
+- "\u9996\u9875":
+  - {"\u7B80\u4ECB": index.md}
+site_author: berTrAM
+site_description: "\u6D4B\u8BD52"
+site_name: "\u6D4B\u8BD51"
+site_url: http://
+theme:
+  feature: {tabs: true}
+  font: {code: Source Code Pro, text: Noto Sans}
+  language: zh
+  logo: {icon: school}
+  name: material
+  palette: {accent: blue, primary: white}

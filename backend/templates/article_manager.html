@@ -1,0 +1,142 @@
+{% extends "base.html"%}
+{% block title %}
+文章管理
+{% endblock %}
+{% block head_title %}
+文章管理
+{% endblock %}
+{% block active_page %}
+文章管理
+{% endblock %}
+{% block body %}
+<section class="content">
+      <!-- Main row -->
+      <div class="row">
+        <div class="col-md-12">
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">所有文章</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                  <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>页面</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    {% if online_files %}
+                      {% for online_file in online_files %}
+                        <tr>
+                          <td>{{ loop.index0 }}</td>
+                          <td><a href="#" id="modify">{{ online_file }}</a></td>
+                          <td><button type="button" class="btn btn-success btn-xs">在线</button></td>
+                          <td>
+                            <button id="delete" type="button" class="btn btn-danger btn-xs" disabled=""><i class="fa fa-fw fa-minus-square"></i></button>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                    {% if offline_files %}
+                      {% for offline_file in offline_files %}
+                        <tr>
+                          <td id="article_id">{{ loop.index0 }}</td>
+                          <td><a href="#" id="modify">{{ offline_file }}</a></td>
+                          <td><button type="button" class="btn btn-danger btn-xs">下线</button></td>
+                          <td>
+                            <button id="delete" type="button" class="btn btn-danger btn-xs"><i class="fa fa-fw fa-minus-square"></i></button>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <button id="delete_all" class="btn btn-sm btn-info btn-flat pull-right">删除所有下线线文章</button>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+
+    $("[id = delete]").click(function(){
+      var article_id =$(this).parent().parent().children("#article_id").html();
+      console.log(article_id);
+      var data = {"article_id":article_id};
+      
+      $.ajax({
+          type:'POST',
+          url:"/admin/API/article/delete",
+          async: false,
+          contentType:'application/json',
+          data:JSON.stringify(data),
+          success:function(result){
+            if(result.code == 200){
+              alert(result.msg);
+              window.location.reload();
+            }else if(result.code == 500){
+              alert(result.msg);
+            };
+          },error:function(){
+            alert("网络错误");
+          }
+      });
+      return false;
+
+    });
+
+    $("[id = modify]").click(function(){
+      var article_id =$(this).html();
+      //console.log(encodeURI(article_id));
+      //var data = {"article_id":article_id};
+      window.location.href = "/admin/article_modify/"+encodeURI(article_id);
+      return false;
+
+    });
+
+    $("#delete_all").click(function(){
+      $.ajax({
+          type:'GET',
+          url:"/admin/API/article/delete_all",
+          async: false,
+          success:function(result){
+            if(result.code == 200){
+              alert(result.msg);
+              window.location.reload();
+            }else if(result.code == 500){
+              alert(result.msg);
+            };
+          },error:function(){
+            alert("网络错误");
+          }
+      });
+      return false;
+  });
+
+
+});
+</script>
+{% endblock %}

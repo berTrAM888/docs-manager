@@ -1,0 +1,10 @@
+site_name: 浙江警察学院
+pages:
+        - 首页: index.md
+        - 公安知识: gazs.md
+theme:
+        name: 'material'
+        palette:
+                primary: 'white'
+                accent: 'blue'
+        language: 'zh'

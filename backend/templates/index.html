@@ -1,0 +1,75 @@
+{% extends "base.html"%}
+{% block title %}
+仪表盘
+{% endblock %}
+{% block head_title %}
+仪表盘
+{% endblock %}
+{% block active_page %}
+仪表盘
+{% endblock %}
+{% block body %}
+<section class="content">
+      <!-- Info boxes -->
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-tasks"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">上线文章数量</span>
+              <span id="chall_count" class="info-box-number">{{ article_count }}</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-user"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">管理员数量</span>
+              <span id="chall_count" class="info-box-number">{{ admin_count }}</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- fix for small devices only -->
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-flag"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">网站访问</span>
+              <span id="user_count" class="info-box-number">正常</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="fa fa-tv"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">配置文件</span>
+              <span id="running_dockers" class="info-box-number">正常</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+      <!-- /.row -->
+    </section>
+{% endblock %}
